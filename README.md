@@ -25,11 +25,11 @@ The compiled plugins are placed in subdirectories named after the configuration,
 for example Linux-64-realease for a 64-bits Linux compilation.
 In each of these directories, a `*.bundle` directory is created, which has to be moved to the proper place (`/usr/OFX/Plugins` on Linux, or `/Library/OFX/Plugins` on OS X)
 
-So you can just the command `make install [options]` to automatically compile, and move the plugin folder for your OS's OFX/Plugins folder
+So you can just the command `make [options] && make install` to compile and move the plugin folder for your OS's OFX/Plugins folder
 
 *And for you copy pasters just use this:*
 ```
-sudo make install CONFIG=release BITS=64
+sudo make CONFIG=release BITS=64 && sudo make install CONFIG=release BITS=64
 ```
 
 ## Compiling for Windows
