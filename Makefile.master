@@ -110,6 +110,9 @@ VPATH += $(PATHTOROOT)/Library
 all: $(OBJECTPATH)/$(PLUGINNAME).ofx.bundle
 
 install:
+	@mkdir -p $(OUT_DIR)
+	@mkdir -p $(OBJECTPATH)/
+  
 	@mkdir -p $(DESTDIR)$(PLUGINPATH)
 	(cd $(OBJECTPATH); tar cf - $(PLUGINNAME).ofx.bundle) | (cd "$(DESTDIR)$(PLUGINPATH)"; tar xvf -)
 
