@@ -2,6 +2,7 @@ PLUGINOBJECTS = ofxsThreadSuite.o tinythread.o ofxsOGLTextRenderer.o ofxsOGLFont
 PLUGINNAME = P_Shake
 
 SRC_DIR := src
+OUT_DIR := dist
 
 OFXPATH ?= openfx
 OFXSEXTPATH ?= support

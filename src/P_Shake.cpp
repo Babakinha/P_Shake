@@ -1,6 +1,17 @@
 
-#pragma region Head
 // https://github.com/NatronGitHub/openfx-misc/blob/master/Position/Position.cpp
+
+/*
+TODO:
+
+    Add advanced options:
+        octaves,
+        persistance,
+        lacunarity,
+        burstFrequency,
+        burstContrast
+*/
+#pragma region Head
 
 #include <cmath>
 #include <cfloat> // DBL_MAX
@@ -17,7 +28,7 @@
 using namespace OFX;
 
 #define kPluginName "Shaky Waky UwU"
-#define kPluginGrouping "Babakinha"
+#define kPluginGrouping "Transform"
 #define kPluginDescription "Shake plugin using perlin noise"
 #define kPluginIdentifier "me.Babakinha.P_Shake"
 #define kPluginVersionMajor 1
@@ -32,15 +43,15 @@ using namespace OFX;
 
 #define kParamAmplitude "amplitude"
 #define kParamAmplitudeLabel "Amplitude"
-#define kParamAmplitudeHint "Amplitude of the shaky waky"
+#define kParamAmplitudeHint "How far it shaky"
 
 #define kParamFrequency "frequency"
 #define kParamFrequencyLabel "Frequency"
-#define kParamFrequencyHint "Frequency of the shaky waky"
+#define kParamFrequencyHint "How fast it shaky"
 
 #define kParamMultiplier "multiplier"
 #define kParamMultiplierLabel "Multiplier"
-#define kParamMultiplierHint "Multiplier of the shaky waky"
+#define kParamMultiplierHint "Multiplier for the position"
 
 // Some hosts (e.g. Resolve) may not support normalized defaults (setDefaultCoordinateSystem(eCoordinatesNormalised))
 // #define kParamDefaultsNormalised "defaultsNormalised"
@@ -362,9 +373,9 @@ void ShakePluginFactory::describeInContext(ImageEffectDescriptor& desc, ContextE
     } else {
         gHostSupportsDefaultCoordinateSystem = false; // no multithread here, see kParamDefaultsNormalised
     }
-    freqParam->setDefault(0.5);
+    freqParam->setDefault(0.9);
     freqParam->setRange(-DBL_MAX, DBL_MAX); // Resolve requires range and display range or values are clamped to (-1,1)
-    freqParam->setDisplayRange(-5, 10); // Resolve requires display range or values are clamped to (-1,1)
+    freqParam->setDisplayRange(-5, 0.99); // Resolve requires display range or values are clamped to (-1,1)
     hostHasNativeOverlayForPosition = freqParam->getHostHasNativeOverlayHandle();
     if (hostHasNativeOverlayForPosition) {
         freqParam->setUseHostNativeOverlayHandle(true);
@@ -378,15 +389,15 @@ void ShakePluginFactory::describeInContext(ImageEffectDescriptor& desc, ContextE
     DoubleParamDescriptor* multParam = desc.defineDoubleParam(kParamMultiplier);
     multParam->setLabel(kParamMultiplierLabel);
     multParam->setHint(kParamMultiplierHint);
-    multParam->setDoubleType(eDoubleTypeAngle);
+    multParam->setDoubleType(eDoubleTypeScale);
     if ( multParam->supportsDefaultCoordinateSystem() ) {
         multParam->setDefaultCoordinateSystem(eCoordinatesNormalised); // no need of kParamDefaultsNormalised
     } else {
         gHostSupportsDefaultCoordinateSystem = false; // no multithread here, see kParamDefaultsNormalised
     }
-    multParam->setDefault(1.);
+    multParam->setDefault(250.);
     multParam->setRange(-DBL_MAX, DBL_MAX); // Resolve requires range and display range or values are clamped to (-1,1)
-    multParam->setDisplayRange(-10000, 10000); // Resolve requires display range or values are clamped to (-1,1)
+    multParam->setDisplayRange(-1000, 1000); // Resolve requires display range or values are clamped to (-1,1)
     hostHasNativeOverlayForPosition = ampParam->getHostHasNativeOverlayHandle();
     if (hostHasNativeOverlayForPosition) {
         multParam->setUseHostNativeOverlayHandle(true);
